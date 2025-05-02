@@ -2,7 +2,7 @@ import React from "react";
 
 export const Header = () => {
     return (
-        <div className="header margin-big">
+        <div className="header margin-medium">
             <div className="container">
                 <nav className="navbar bg-info rounded-bottom">
                     <div className="container-fluid">
@@ -13,4 +13,3 @@ export const Header = () => {
         </div>
     );
 };
-// navbar-brand

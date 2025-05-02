@@ -1,21 +1,45 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
+import getAllFromDB from "../utils/getAllFromDB";
 
-export const Form = () => {
+export const Form = ({ setTasks, setLoading }) => {
+    const [formInput, setFormInput] = useState(""); // 'add your task' input
+
+    const formSubmit = async (e) => {
+        try {
+            e.preventDefault();
+            setLoading(true);
+            const res = await axios.post("http://localhost:5000/todos", { todoName: formInput }); // post new to established backend route
+            setLoading(false);
+            if (res.status.toString().startsWith(2)) {
+                getAllFromDB(setTasks, setLoading); // check if all good, fetch all from db
+                setFormInput("");
+            }
+        } catch (error) {
+            console.error(`💥💥💥`, error);
+        }
+    };
+
     return (
-        <div className="form-block margin-big">
+        <div className="form-block margin-medium">
             <div className="container">
-                <form className="form col-12 col-md-9 col-lg-9 col-xl-7 mx-auto">
+                <form className="form col-12 col-md-9 col-lg-9 col-xl-7 mx-auto" onSubmit={formSubmit}>
                     <div className="input-group mb-3">
                         <input
                             type="text"
+                            name="form-input"
                             className="form-control outline-lighter"
                             placeholder="Add your task"
                             aria-label="Add your task"
                             aria-describedby="button-addon2"
+                            value={formInput}
+                            onChange={(e) => setFormInput(e.target.value)}
+                            autoFocus
+                            autoComplete="off"
                         />
                         <button
                             className="btn btn-outline-secondary bg-info text-black hover-opacity-75 btn-clicked"
-                            type="button"
+                            type="submit"
                             id="button-addon2"
                             title="Add"
                         >
