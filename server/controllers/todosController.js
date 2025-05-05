@@ -5,8 +5,8 @@ const Todo = require("../models/Todo"); // bring in the model from my schema
 // Read all to-dos from the db
 const readAllTodos = async (req, res, next) => {
     try {
-        const allTodos = await Todo.find(); // select all docs
-        res.status(200).json(allTodos); // return all
+        const allTodos = await Todo.find({ userId: req.params.userId }); // select all docs that belong to this userId
+        res.status(200).json(allTodos); // return them
     } catch (err) {
         res.status(500).json({ error: "💥💥💥 Reading all failed" });
     }
@@ -17,7 +17,7 @@ const readAllTodos = async (req, res, next) => {
 // Add new to-do to the db
 const addNewTodo = async (req, res, next) => {
     try {
-        const newTodo = new Todo({ todoName: req.body.todoName }); // create a new instance of the Todo model (new doc)
+        const newTodo = new Todo({ todoName: req.body.todoName, userId: req.body.userId }); // create a new instance of the Todo model (new doc)
         const savedTodo = await newTodo.save(); // insert the doc into the db (collection)
         res.status(201).json(savedTodo); // return this doc
     } catch (err) {

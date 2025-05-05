@@ -12,14 +12,20 @@ const {
 
 // ====================================================================================
 
+// sign up or log in
+// route - POST /auth/sign-up  or  POST /auth/log-in
 authRouter.post("/:specifier", checkIfUserExists, authHandler, signToken);
 
 // ====================================================================================
 
+// clear cookie
+// route - GET /auth/log-out
 authRouter.get("/log-out", clearCookie);
 
 // ====================================================================================
 
+// check if cookie is there
+// route - GET /auth/verify
 authRouter.get("/verify", checkCookie);
 
 // ====================================================================================

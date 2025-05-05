@@ -2,17 +2,17 @@ import React, { useState } from "react";
 import axios from "axios";
 import getAllFromDB from "../utils/getAllFromDB";
 
-export const Form = ({ setTasks, setLoading }) => {
+export const Form = ({ setTasks, setLoading, userId }) => {
     const [formInput, setFormInput] = useState(""); // 'add your task' input
 
     const formSubmit = async (e) => {
         try {
             e.preventDefault();
             setLoading(true);
-            const res = await axios.post("http://localhost:5000/todos", { todoName: formInput }); // post new to established backend route
+            const res = await axios.post("http://localhost:5000/todos", { todoName: formInput, userId }); // post new to established backend route
             setLoading(false);
             if (res.status.toString().startsWith(2)) {
-                getAllFromDB(setTasks, setLoading); // check if all good, fetch all from db
+                getAllFromDB(setTasks, setLoading, userId); // check if all good, fetch all from db
                 setFormInput("");
             }
         } catch (error) {

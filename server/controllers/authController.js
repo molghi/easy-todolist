@@ -98,7 +98,11 @@ const signToken = async (req, res, next) => {
             // secure: process.env.NODE_ENV === "production", // Set to true in production for HTTPS
             maxAge: 24 * 60 * 60 * 1000, // 1 day
         });
-        return res.status(statusCode).json({ token, username: req.body.user.username }); // Return the token in the response
+        return res.status(statusCode).json({
+            token,
+            username: req.body.user.username,
+            userId: req.params.specifier === "log-in" && req.body.user._id,
+        }); // Return the token in the response
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: "Server Error" });
@@ -107,6 +111,7 @@ const signToken = async (req, res, next) => {
 
 // ====================================================================================
 
+// clear the auth cookie
 const clearCookie = async (req, res, next) => {
     try {
         res.clearCookie("authToken", { httpOnly: true });
@@ -119,11 +124,15 @@ const clearCookie = async (req, res, next) => {
 
 // ====================================================================================
 
+// check if the auth cookie is there
 const checkCookie = async (req, res, next) => {
     try {
         if (!req.cookies.authToken) {
             return res.status(401).json({ message: "No auth cookie" }); // check for the absence of it
         }
+        const decoded = jwt.verify(req.cookies.authToken, process.env.JWT_SECRET); // extract the user's ID from req.cookies.authToken -- verify and decode the JWT.
+        req.userId = decoded.userId;
+        res.status(200).json({ message: decoded.userId });
         // read the authToken cookie -- verify it via jwt.verify() -- return user info or status
     } catch (err) {
         console.error(err);

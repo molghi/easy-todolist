@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import getAllFromDB from "../utils/getAllFromDB";
 
-export const Task = ({ task, setTasks, setLoading }) => {
+export const Task = ({ task, setTasks, setLoading, userId }) => {
     const [input, setInput] = useState(task.todoName || ""); // todo name
 
     const formatDateString = (dateStr) => {
@@ -22,7 +22,7 @@ export const Task = ({ task, setTasks, setLoading }) => {
             const res = await axios.delete("http://localhost:5000/todos", { data: { id: task._id } });
             setLoading(false);
             if (res.status.toString().startsWith(2)) {
-                getAllFromDB(setTasks, setLoading); // check if all good, fetch all from db
+                getAllFromDB(setTasks, setLoading, userId); // check if all good, fetch all from db
             }
         } catch (err) {
             console.error(`💥💥💥 deleteOne`, err);
@@ -35,7 +35,7 @@ export const Task = ({ task, setTasks, setLoading }) => {
             const res = await axios.patch(`http://localhost:5000/todos/${task._id}`, { todoName: input }); // edit only todo name
             setLoading(false);
             if (res.status.toString().startsWith(2)) {
-                getAllFromDB(setTasks, setLoading); // check if all good, fetch all from db
+                getAllFromDB(setTasks, setLoading, userId); // check if all good, fetch all from db
             }
         } catch (err) {
             console.error(`💥💥💥 editOne`, err);
@@ -50,7 +50,7 @@ export const Task = ({ task, setTasks, setLoading }) => {
             const res = await axios.patch(`http://localhost:5000/todos/${task._id}`, { dateCompleted, isCompleted }); // toggle completed of one todo
             setLoading(false);
             if (res.status.toString().startsWith(2)) {
-                getAllFromDB(setTasks, setLoading); // check if all good, fetch all from db
+                getAllFromDB(setTasks, setLoading, userId); // check if all good, fetch all from db
             }
         } catch (err) {
             console.error(`💥💥💥 toggleCompleted`, err);

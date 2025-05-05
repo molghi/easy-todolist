@@ -3,11 +3,12 @@ import { Task } from "./Task";
 import getAllFromDB from "../utils/getAllFromDB";
 import typewriterEffect from "../utils/typewriterEffect";
 
-export const Tasks = ({ tasks, setTasks, loading, setLoading }) => {
+export const Tasks = ({ tasks, setTasks, loading, setLoading, userId }) => {
     let timer;
     useEffect(() => {
-        getAllFromDB(setTasks, setLoading); // fetch all on component mount
-    }, [setTasks, setLoading]);
+        if (userId) getAllFromDB(setTasks, setLoading, userId); // fetch all on component mount
+    }, [userId, setTasks, setLoading]);
+
     useEffect(() => {
         if (loading) typewriterEffect(timer);
     }, [loading, timer]);
@@ -28,7 +29,9 @@ export const Tasks = ({ tasks, setTasks, loading, setLoading }) => {
                     </div>
                     {tasks &&
                         tasks.length > 0 &&
-                        tasks.map((task) => <Task key={task._id} task={task} setTasks={setTasks} setLoading={setLoading} />)}
+                        tasks.map((task) => (
+                            <Task key={task._id} task={task} setTasks={setTasks} setLoading={setLoading} userId={userId} />
+                        ))}
                 </div>
             </div>
         </div>

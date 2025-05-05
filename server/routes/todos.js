@@ -7,7 +7,7 @@ const { readAllTodos, addNewTodo, deleteOneTodo, editOneTodo } = require("../con
 
 // Read all from DB
 // route - GET /todos
-todosRouter.get("/", readAllTodos);
+todosRouter.get("/:userId", readAllTodos);
 
 // ====================================================================================
 
@@ -23,6 +23,8 @@ todosRouter.delete("/", deleteOneTodo);
 
 // ====================================================================================
 
+// Edit one todo: its name or completeness
+// route - PATCH /todos/todoId
 todosRouter.patch("/:id", editOneTodo);
 
 // ====================================================================================
