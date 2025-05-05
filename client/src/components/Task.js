@@ -69,22 +69,24 @@ export const Task = ({ task, setTasks, setLoading }) => {
                     placeholder="Add your task"
                     aria-label="Add your task"
                     aria-describedby="button-addon2"
-                    title="Click to edit"
+                    title={!task.isCompleted ? `Click to edit` : "Uncomplete to edit"}
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onBlur={editOne}
                 />
                 <button
                     className="btn btn-outline-secondary bg-success text-white hover-opacity-75 btn-clicked"
+                    style={{ minWidth: "53px" }}
                     type="button"
                     id="button-addon2"
-                    title="Complete"
+                    title={task.isCompleted ? `Uncomplete` : "Complete"}
                     onClick={toggleCompleted}
                 >
                     <i className="bi bi-check fs-3"></i>
                 </button>
                 <button
                     className="btn btn-outline-secondary bg-danger text-white hover-opacity-75 btn-clicked"
+                    style={{ minWidth: "53px" }}
                     type="button"
                     id="button-addon2"
                     title="Delete"
@@ -93,7 +95,7 @@ export const Task = ({ task, setTasks, setLoading }) => {
                     <i className="bi bi-trash fs-5"></i>
                 </button>
             </div>
-            <div className="d-flex gap-5">
+            <div className="d-flex flex-wrap gap-5 gap-sm">
                 <small className="form-text text-white-50 ms-1">Created: {formatDateString(task.dateCreated)}</small>
                 {task.isCompleted && (
                     <small className="form-text text-white-50 ms-1">Completed: {formatDateString(task.dateCompleted)}</small>

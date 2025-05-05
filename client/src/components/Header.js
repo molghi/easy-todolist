@@ -1,12 +1,35 @@
-import React from "react";
+import axios from "axios";
 
-export const Header = () => {
+export const Header = ({ loggedIn, setLoggedIn, username, setUsername }) => {
+    const logOut = async () => {
+        try {
+            const res = await axios.get("http://localhost:5000/auth/log-out", { withCredentials: true });
+            console.log(res);
+            if (res.status.toString().startsWith(2)) {
+                setLoggedIn(false);
+                setUsername("");
+                localStorage.setItem("isLoggedIn", false);
+                localStorage.setItem("username", "");
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const capitalise = (value) => value[0].toUpperCase() + value.slice(1).toLowerCase();
+
     return (
         <div className="header margin-medium">
             <div className="container">
-                <nav className="navbar bg-info rounded-bottom">
+                <nav className="navbar bg-info rounded-bottom col-12 col-md-11 col-lg-11 col-xl-9 mx-auto">
                     <div className="container-fluid">
-                        <span className="mb-0 fw-bold fs-2">To-Do List</span>
+                        <h1 className="mb-0 fw-bold fs-2 py-2">To-Do List</h1>
+                        {loggedIn && username && <span className="lead fw-bold">Hi {capitalise(username)}!</span>}
+                        {loggedIn && (
+                            <button onClick={logOut} className="button bg-black text-info hover-opacity-75">
+                                Log Out
+                            </button>
+                        )}
                     </div>
                 </nav>
             </div>

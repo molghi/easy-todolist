@@ -7,10 +7,10 @@ export const Tasks = ({ tasks, setTasks, loading, setLoading }) => {
     let timer;
     useEffect(() => {
         getAllFromDB(setTasks, setLoading); // fetch all on component mount
-    }, []);
+    }, [setTasks, setLoading]);
     useEffect(() => {
         if (loading) typewriterEffect(timer);
-    }, [loading]);
+    }, [loading, timer]);
 
     return (
         <div className="tasks">

@@ -1,21 +1,35 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "./custom.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Header } from "./components/Header";
 import { Form } from "./components/Form";
 import { Tasks } from "./components/Tasks";
+import { AuthForm } from "./components/AuthForm";
+import checkForCookie from "./utils/checkForCookie";
 
 function App() {
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [loggedIn, setLoggedIn] = useState(false);
+    const [username, setUsername] = useState("");
     console.log(tasks);
+
+    useEffect(() => {
+        const isLoggedIn = localStorage.getItem("isLoggedIn");
+        if (isLoggedIn === "true") setLoggedIn(true);
+        const usernameFromLS = localStorage.getItem("username");
+        if (usernameFromLS && !username) setUsername(usernameFromLS);
+        checkForCookie();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <>
-            <Header />
-            <Form setTasks={setTasks} setLoading={setLoading} />
-            <Tasks tasks={tasks} setTasks={setTasks} loading={loading} setLoading={setLoading} />
+            <Header loggedIn={loggedIn} setLoggedIn={setLoggedIn} username={username} setUsername={setUsername} />
+            {!loggedIn && <AuthForm setLoggedIn={setLoggedIn} setUsername={setUsername} />}
+            {loggedIn && <Form setTasks={setTasks} setLoading={setLoading} />}
+            {loggedIn && <Tasks tasks={tasks} setTasks={setTasks} loading={loading} setLoading={setLoading} />}
         </>
     );
 }

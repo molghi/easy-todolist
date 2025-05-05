@@ -55,3 +55,14 @@
 /* For Firefox */
 scrollbar-width: thin; /* Thin scrollbar */
 scrollbar-color: black #f1f1f1; /* Thumb and track color (thumb, track) */
+
+/* ============================================================================== */
+
+.gap-sm {
+}
+
+@media (max-width: 576px) {
+    .gap-sm {
+        row-gap: 0 !important;
+    }
+}
