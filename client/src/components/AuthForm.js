@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
-import getAllFromDB from "../utils/getAllFromDB";
 
 export const AuthForm = ({ setLoggedIn, setUsername, setUserId }) => {
     const [usernameInput, setUsernameInput] = useState("");
@@ -14,7 +13,6 @@ export const AuthForm = ({ setLoggedIn, setUsername, setUserId }) => {
     const submitForm = async (e) => {
         try {
             let res;
-            // let operation;
             e.preventDefault();
             const username = usernameInput;
             const password = passwordInput;
@@ -29,7 +27,6 @@ export const AuthForm = ({ setLoggedIn, setUsername, setUserId }) => {
 
             if (!passwordRepeated) {
                 setErrorMsg(""); // case: submitting log in form
-                // operation = "log-in";
                 res = await axios.post(
                     "http://localhost:5000/auth/log-in",
                     { username, password },

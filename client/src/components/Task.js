@@ -2,8 +2,12 @@ import { useState } from "react";
 import axios from "axios";
 import getAllFromDB from "../utils/getAllFromDB";
 
-export const Task = ({ task, setTasks, setLoading, userId }) => {
+export const Task = ({ task, setTasks, setLoading, userId, completedShown, uncompletedShown }) => {
     const [input, setInput] = useState(task.todoName || ""); // todo name
+    let showFlag = false;
+    if (!completedShown && !uncompletedShown) showFlag = true;
+    if (completedShown && task.isCompleted) showFlag = true;
+    if (uncompletedShown && !task.isCompleted) showFlag = true;
 
     const formatDateString = (dateStr) => {
         return new Intl.DateTimeFormat("en-UK", {
@@ -57,7 +61,7 @@ export const Task = ({ task, setTasks, setLoading, userId }) => {
         }
     };
 
-    return (
+    const taskMarkup = (
         <div className="task mb-3">
             <div className="input-group mb-1">
                 <input
@@ -103,4 +107,6 @@ export const Task = ({ task, setTasks, setLoading, userId }) => {
             </div>
         </div>
     );
+
+    return showFlag && taskMarkup;
 };

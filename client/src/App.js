@@ -14,6 +14,8 @@ function App() {
     const [loggedIn, setLoggedIn] = useState(false);
     const [username, setUsername] = useState("");
     const [userId, setUserId] = useState("");
+    const [completedShown, setCompletedShown] = useState(false); // checkbox in Form
+    const [uncompletedShown, setUncompletedShown] = useState(false); // checkbox in Form
     // console.log(tasks);
 
     useEffect(() => {
@@ -38,8 +40,28 @@ function App() {
                     setUserId={setUserId}
                 />
             )}
-            {loggedIn && <Form setTasks={setTasks} setLoading={setLoading} userId={userId} />}
-            {loggedIn && <Tasks tasks={tasks} setTasks={setTasks} loading={loading} setLoading={setLoading} userId={userId} />}
+            {loggedIn && (
+                <Form
+                    setTasks={setTasks}
+                    setLoading={setLoading}
+                    userId={userId}
+                    completedShown={completedShown}
+                    setCompletedShown={setCompletedShown}
+                    uncompletedShown={uncompletedShown}
+                    setUncompletedShown={setUncompletedShown}
+                />
+            )}
+            {loggedIn && (
+                <Tasks
+                    tasks={tasks}
+                    setTasks={setTasks}
+                    loading={loading}
+                    setLoading={setLoading}
+                    userId={userId}
+                    completedShown={completedShown}
+                    uncompletedShown={uncompletedShown}
+                />
+            )}
         </>
     );
 }

@@ -2,7 +2,15 @@ import React, { useState } from "react";
 import axios from "axios";
 import getAllFromDB from "../utils/getAllFromDB";
 
-export const Form = ({ setTasks, setLoading, userId }) => {
+export const Form = ({
+    setTasks,
+    setLoading,
+    userId,
+    completedShown,
+    setCompletedShown,
+    uncompletedShown,
+    setUncompletedShown,
+}) => {
     const [formInput, setFormInput] = useState(""); // 'add your task' input
 
     const formSubmit = async (e) => {
@@ -45,6 +53,45 @@ export const Form = ({ setTasks, setLoading, userId }) => {
                         >
                             <i className="bi bi-plus fs-3"></i>
                         </button>
+                    </div>
+                    <div className="checks d-flex gap-4">
+                        <span className="text-white fw-bold">View Mode:</span>
+                        <div className="form-check">
+                            <input
+                                className="form-check-input"
+                                type="checkbox"
+                                value=""
+                                id="checkDefault"
+                                checked={completedShown}
+                                onChange={() => setCompletedShown((prev) => !prev)}
+                            />
+                            <label
+                                className="form-check-label text-white"
+                                htmlFor="checkDefault"
+                                title="View completed tasks"
+                                style={{ cursor: "pointer" }}
+                            >
+                                Completed
+                            </label>
+                        </div>
+                        <div className="form-check">
+                            <input
+                                className="form-check-input"
+                                type="checkbox"
+                                value=""
+                                id="checkChecked"
+                                checked={uncompletedShown}
+                                onChange={() => setUncompletedShown((prev) => !prev)}
+                            />
+                            <label
+                                className="form-check-label text-white"
+                                htmlFor="checkChecked"
+                                title="View uncompleted tasks"
+                                style={{ cursor: "pointer" }}
+                            >
+                                Uncompleted
+                            </label>
+                        </div>
                     </div>
                 </form>
             </div>
