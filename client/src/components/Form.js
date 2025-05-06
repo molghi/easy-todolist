@@ -1,23 +1,19 @@
-import React, { useState } from "react";
+import { useState, useContext } from "react";
+import MyContext from "../context/MyContext";
 import axios from "axios";
 import getAllFromDB from "../utils/getAllFromDB";
 
-export const Form = ({
-    setTasks,
-    setLoading,
-    userId,
-    completedShown,
-    setCompletedShown,
-    uncompletedShown,
-    setUncompletedShown,
-}) => {
+export const Form = () => {
+    const { setTasks, setLoading, userId, completedShown, setCompletedShown, uncompletedShown, setUncompletedShown } =
+        useContext(MyContext);
+
     const [formInput, setFormInput] = useState(""); // 'add your task' input
 
     const formSubmit = async (e) => {
         try {
             e.preventDefault();
             setLoading(true);
-            const res = await axios.post("http://localhost:5000/todos", { todoName: formInput, userId }); // post new to established backend route
+            const res = await axios.post("/todos", { todoName: formInput, userId }); // post new to established backend route
             setLoading(false);
             if (res.status.toString().startsWith(2)) {
                 getAllFromDB(setTasks, setLoading, userId); // check if all good, fetch all from db

@@ -1,7 +1,11 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
+import MyContext from "../context/MyContext";
+
 import axios from "axios";
 
-export const AuthForm = ({ setLoggedIn, setUsername, setUserId }) => {
+export const AuthForm = () => {
+    const { setLoggedIn, setUsername, setUserId } = useContext(MyContext);
+
     const [usernameInput, setUsernameInput] = useState("");
     const [passwordInput, setPasswordInput] = useState("");
     const [repeatPasswordInput, setRepeatPasswordInput] = useState("");
@@ -28,7 +32,7 @@ export const AuthForm = ({ setLoggedIn, setUsername, setUserId }) => {
             if (!passwordRepeated) {
                 setErrorMsg(""); // case: submitting log in form
                 res = await axios.post(
-                    "http://localhost:5000/auth/log-in",
+                    "/auth/log-in",
                     { username, password },
                     { withCredentials: true } /* to include the cookie in subsequent requests */
                 );
@@ -37,7 +41,7 @@ export const AuthForm = ({ setLoggedIn, setUsername, setUserId }) => {
                 if (!passwordsMatch) return setErrorMsg("Passwords do not match");
                 setErrorMsg("");
                 res = await axios.post(
-                    "http://localhost:5000/auth/sign-up",
+                    "/auth/sign-up",
                     { username, password, passwordRepeated },
                     { withCredentials: true } /* to include the cookie in subsequent requests */
                 );

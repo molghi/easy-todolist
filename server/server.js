@@ -13,7 +13,7 @@ const authRouter = require("./routes/auth");
 // Init Express
 const app = express();
 
-// Basic Express Middleware
+// Basic Middleware Stack
 app.use(
     cors({
         origin: "http://localhost:3000", // My front-end origin (dev mode)
@@ -23,6 +23,7 @@ app.use(
 app.use(express.json({ limit: "10kb" })); // security layer: constrain incoming JSON payloads to 10 kb, offering some protection against large-body attacks
 app.use(express.urlencoded({ extended: false }));
 app.use(helmet()); // security layer: set up HTTP security headers
+app.set("trust proxy", 1); // trust first proxy (during local dev)
 app.use(
     rateLimit({
         windowMs: 15 * 60 * 1000, // within 15 minutes...  (after this period the request count will be reset)
@@ -49,11 +50,3 @@ mongoose
 // App Routes
 app.use("/todos", todosRouter);
 app.use("/auth", authRouter);
-
-/* app.use((req, res, next) => {
-    const hasUnsafeKey = (obj) => Object.keys(obj).some((key) => key.includes("$") || key.includes(".")); // check for $ or . keys
-    if (hasUnsafeKey(req.body) || hasUnsafeKey(req.query)) {
-        return res.status(400).json({ message: "Bad input detected" });
-    }
-    next();
-}); */

@@ -1,7 +1,12 @@
 const express = require("express");
 const todosRouter = express.Router(); // bring in express router
 
-const { readAllTodos, addNewTodo, deleteOneTodo, editOneTodo } = require("../controllers/todosController"); // bring in route handlers
+const { readAllTodos, addNewTodo, deleteOneTodo, editOneTodo, checkLoggedIn } = require("../controllers/todosController"); // bring in route handlers
+
+// ====================================================================================
+
+// Check if logged in before proceeding to any of the actions beloww
+todosRouter.use(checkLoggedIn);
 
 // ====================================================================================
 

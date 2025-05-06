@@ -1,9 +1,13 @@
+import { useContext } from "react";
+import MyContext from "../context/MyContext";
 import axios from "axios";
 
-export const Header = ({ loggedIn, setLoggedIn, username, setUsername }) => {
+export const Header = () => {
+    const { loggedIn, setLoggedIn, username, setUsername } = useContext(MyContext);
+
     const logOut = async () => {
         try {
-            const res = await axios.get("http://localhost:5000/auth/log-out", { withCredentials: true });
+            const res = await axios.get("/auth/log-out", { withCredentials: true });
             console.log(res);
             if (res.status.toString().startsWith(2)) {
                 setLoggedIn(false);
@@ -26,7 +30,7 @@ export const Header = ({ loggedIn, setLoggedIn, username, setUsername }) => {
                         <h1 className="mb-0 fw-bold fs-2 py-2">To-Do List</h1>
                         {loggedIn && username && <span className="lead fw-bold">Hi {capitalise(username)}!</span>}
                         {loggedIn && (
-                            <button onClick={logOut} className="button bg-black text-info hover-opacity-75">
+                            <button onClick={logOut} className="btn bg-black text-info hover-opacity-75">
                                 Log Out
                             </button>
                         )}

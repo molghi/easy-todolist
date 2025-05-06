@@ -1,12 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
+import MyContext from "../context/MyContext";
 import { Task } from "./Task";
 import getAllFromDB from "../utils/getAllFromDB";
 import typewriterEffect from "../utils/typewriterEffect";
 
-export const Tasks = ({ tasks, setTasks, loading, setLoading, userId, completedShown, uncompletedShown }) => {
-    // console.log(tasks);
-    // console.log(completedShown);
-    // console.log(uncompletedShown);
+export const Tasks = () => {
+    const { tasks, setTasks, loading, setLoading, userId, completedShown, uncompletedShown } = useContext(MyContext);
+
     let timer;
     let numberOfTasks = tasks.length;
     if (completedShown) numberOfTasks = tasks.filter((task) => task.isCompleted).length;

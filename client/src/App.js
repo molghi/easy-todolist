@@ -1,22 +1,37 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "./custom.css";
-import { useState, useEffect } from "react";
-import { Header } from "./components/Header";
+import { useEffect, useContext } from "react";
+// import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider } from "react-router-dom";
+// import MainLayout from "./layouts/MainLayout";
+// import NotFound from "./components/NotFound";
 import { Form } from "./components/Form";
 import { Tasks } from "./components/Tasks";
+import { Header } from "./components/Header";
 import { AuthForm } from "./components/AuthForm";
 import checkForCookie from "./utils/checkForCookie";
+import MyContext from "./context/MyContext";
 
 function App() {
-    const [tasks, setTasks] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [loggedIn, setLoggedIn] = useState(false);
-    const [username, setUsername] = useState("");
-    const [userId, setUserId] = useState("");
-    const [completedShown, setCompletedShown] = useState(false); // checkbox in Form
-    const [uncompletedShown, setUncompletedShown] = useState(false); // checkbox in Form
-    // console.log(tasks);
+    const { loggedIn, setLoggedIn, username, setUsername, setUserId } = useContext(MyContext);
+
+    // const router = createBrowserRouter(
+    //     createRoutesFromElements(
+    //         <Route path="/" element={<MainLayout />}>
+    //             <Route index path="/auth" element={<AuthForm />} />
+    //             <Route
+    //                 path="/tasks"
+    //                 element={
+    //                     <>
+    //                         <Form />
+    //                         <Tasks />
+    //                     </>
+    //                 }
+    //             />
+    //             <Route path="*" element={<NotFound />} />
+    //         </Route>
+    //     )
+    // );
 
     useEffect(() => {
         const isLoggedIn = localStorage.getItem("isLoggedIn");
@@ -27,40 +42,17 @@ function App() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    // return <RouterProvider router={router} />;
+
     return (
         <>
-            <Header loggedIn={loggedIn} setLoggedIn={setLoggedIn} username={username} setUsername={setUsername} />
-            {!loggedIn && (
-                <AuthForm
-                    setLoggedIn={setLoggedIn}
-                    setUsername={setUsername}
-                    setTasks={setTasks}
-                    setLoading={setLoading}
-                    userId={userId}
-                    setUserId={setUserId}
-                />
-            )}
+            <Header />
+            {!loggedIn && <AuthForm />}
             {loggedIn && (
-                <Form
-                    setTasks={setTasks}
-                    setLoading={setLoading}
-                    userId={userId}
-                    completedShown={completedShown}
-                    setCompletedShown={setCompletedShown}
-                    uncompletedShown={uncompletedShown}
-                    setUncompletedShown={setUncompletedShown}
-                />
-            )}
-            {loggedIn && (
-                <Tasks
-                    tasks={tasks}
-                    setTasks={setTasks}
-                    loading={loading}
-                    setLoading={setLoading}
-                    userId={userId}
-                    completedShown={completedShown}
-                    uncompletedShown={uncompletedShown}
-                />
+                <>
+                    <Form />
+                    <Tasks />
+                </>
             )}
         </>
     );

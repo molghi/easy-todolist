@@ -18,7 +18,7 @@ authRouter.post("/:specifier", checkIfUserExists, authHandler, signToken);
 
 // ====================================================================================
 
-// clear cookie
+// clear cookie on log out
 // route - GET /auth/log-out
 authRouter.get("/log-out", clearCookie);
 
