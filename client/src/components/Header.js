@@ -3,12 +3,12 @@ import MyContext from "../context/MyContext";
 import axios from "axios";
 
 export const Header = () => {
-    const { loggedIn, setLoggedIn, username, setUsername } = useContext(MyContext);
+    const { loggedIn, setLoggedIn, username, setUsername, baseUrl } = useContext(MyContext);
 
     const logOut = async () => {
         try {
-            const res = await axios.get("/auth/log-out", { withCredentials: true });
-            console.log(res);
+            const res = await axios.get(`${baseUrl}/auth/log-out`, { withCredentials: true });
+            // console.log(res);
             if (res.status.toString().startsWith(2)) {
                 setLoggedIn(false);
                 setUsername("");

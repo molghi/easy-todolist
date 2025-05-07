@@ -5,7 +5,7 @@ import getAllFromDB from "../utils/getAllFromDB";
 import typewriterEffect from "../utils/typewriterEffect";
 
 export const Tasks = () => {
-    const { tasks, setTasks, loading, setLoading, userId, completedShown, uncompletedShown } = useContext(MyContext);
+    const { tasks, setTasks, loading, setLoading, userId, completedShown, uncompletedShown, baseUrl } = useContext(MyContext);
 
     let timer;
     let numberOfTasks = tasks.length;
@@ -45,6 +45,7 @@ export const Tasks = () => {
                                 userId={userId}
                                 completedShown={completedShown}
                                 uncompletedShown={uncompletedShown}
+                                baseUrl={baseUrl}
                             />
                         ))}
                 </div>

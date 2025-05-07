@@ -51,7 +51,6 @@ const signUp = async (req, res, next, username, password) => {
 const logIn = async (req, res, next, username, password) => {
     try {
         const { username, password } = req.body;
-        console.log(username, password);
         const existingUser = await User.findOne({ username }); // Query the db by username
         if (!existingUser) {
             return res.status(401).json({ message: "User not found" });
@@ -62,7 +61,6 @@ const logIn = async (req, res, next, username, password) => {
         if (!isMatch) {
             return res.status(401).json({ message: "Incorrect credentials" });
         }
-        console.log(`log in: all good, calling next middleware`);
         return next();
     } catch (err) {
         console.error(err);
@@ -143,7 +141,7 @@ const checkCookie = async (req, res, next) => {
 // ====================================================================================
 
 const validateInputs = (req, res, next) => {
-    console.log(req.params.specifier);
+    // console.log(req.params.specifier);
     const { username, password, passwordRepeated } = req.body;
     const usernameIsFine = /^[A-Za-z][A-Za-z0-9]{2,}$/.test(username);
     // const passwordIsFine = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password);

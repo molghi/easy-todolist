@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import getAllFromDB from "../utils/getAllFromDB";
 
-export const Task = ({ task, setTasks, setLoading, userId, completedShown, uncompletedShown }) => {
+export const Task = ({ task, setTasks, setLoading, userId, completedShown, uncompletedShown, baseUrl }) => {
     const [input, setInput] = useState(task.todoName || ""); // todo name
     let showFlag = false;
     if (!completedShown && !uncompletedShown) showFlag = true;
@@ -23,10 +23,10 @@ export const Task = ({ task, setTasks, setLoading, userId, completedShown, uncom
     const deleteOne = async () => {
         try {
             setLoading(true);
-            const res = await axios.delete("/todos", { data: { id: task._id } });
+            const res = await axios.delete(`${baseUrl}/todos`, { data: { id: task._id } });
             setLoading(false);
             if (res.status.toString().startsWith(2)) {
-                getAllFromDB(setTasks, setLoading, userId); // check if all good, fetch all from db
+                getAllFromDB(setTasks, setLoading, userId, baseUrl); // check if all good, fetch all from db
             }
         } catch (err) {
             console.error(`💥💥💥 deleteOne`, err);
@@ -36,10 +36,10 @@ export const Task = ({ task, setTasks, setLoading, userId, completedShown, uncom
     const editOne = async () => {
         try {
             setLoading(true);
-            const res = await axios.patch(`/todos/${task._id}`, { todoName: input }); // edit only todo name
+            const res = await axios.patch(`${baseUrl}/todos/${task._id}`, { todoName: input }); // edit only todo name
             setLoading(false);
             if (res.status.toString().startsWith(2)) {
-                getAllFromDB(setTasks, setLoading, userId); // check if all good, fetch all from db
+                getAllFromDB(setTasks, setLoading, userId, baseUrl); // check if all good, fetch all from db
             }
         } catch (err) {
             console.error(`💥💥💥 editOne`, err);
@@ -51,10 +51,10 @@ export const Task = ({ task, setTasks, setLoading, userId, completedShown, uncom
             const dateCompleted = task.dateCompleted === null ? new Date().toISOString() : null; // either when or null
             const isCompleted = task.isCompleted ? false : true; // either true or false
             setLoading(true);
-            const res = await axios.patch(`/todos/${task._id}`, { dateCompleted, isCompleted }); // toggle completed of one todo
+            const res = await axios.patch(`${baseUrl}/todos/${task._id}`, { dateCompleted, isCompleted }); // toggle completed of one todo
             setLoading(false);
             if (res.status.toString().startsWith(2)) {
-                getAllFromDB(setTasks, setLoading, userId); // check if all good, fetch all from db
+                getAllFromDB(setTasks, setLoading, userId, baseUrl); // check if all good, fetch all from db
             }
         } catch (err) {
             console.error(`💥💥💥 toggleCompleted`, err);

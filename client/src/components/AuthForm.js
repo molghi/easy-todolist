@@ -1,10 +1,9 @@
 import { useState, useRef, useEffect, useContext } from "react";
 import MyContext from "../context/MyContext";
-
 import axios from "axios";
 
 export const AuthForm = () => {
-    const { setLoggedIn, setUsername, setUserId } = useContext(MyContext);
+    const { setLoggedIn, setUsername, setUserId, baseUrl } = useContext(MyContext);
 
     const [usernameInput, setUsernameInput] = useState("");
     const [passwordInput, setPasswordInput] = useState("");
@@ -21,7 +20,6 @@ export const AuthForm = () => {
             const username = usernameInput;
             const password = passwordInput;
             const passwordRepeated = repeatPasswordInput;
-            console.log(username, password, passwordRepeated);
 
             const usernameIsFine = /^[A-Za-z][A-Za-z0-9]{2,}$/.test(username); // Some front-end validation
             const passwordIsFine = /^[A-Za-z0-9]{8,}$/.test(password);
@@ -32,7 +30,7 @@ export const AuthForm = () => {
             if (!passwordRepeated) {
                 setErrorMsg(""); // case: submitting log in form
                 res = await axios.post(
-                    "/auth/log-in",
+                    `${baseUrl}/auth/log-in`,
                     { username, password },
                     { withCredentials: true } /* to include the cookie in subsequent requests */
                 );
@@ -41,13 +39,13 @@ export const AuthForm = () => {
                 if (!passwordsMatch) return setErrorMsg("Passwords do not match");
                 setErrorMsg("");
                 res = await axios.post(
-                    "/auth/sign-up",
+                    `${baseUrl}/auth/sign-up`,
                     { username, password, passwordRepeated },
                     { withCredentials: true } /* to include the cookie in subsequent requests */
                 );
             }
 
-            console.log(res);
+            // console.log(res);
 
             if (res.status.toString().startsWith("2")) {
                 setLoggedIn(true); // if successful

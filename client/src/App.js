@@ -13,7 +13,7 @@ import checkForCookie from "./utils/checkForCookie";
 import MyContext from "./context/MyContext";
 
 function App() {
-    const { loggedIn, setLoggedIn, username, setUsername, setUserId } = useContext(MyContext);
+    const { loggedIn, setLoggedIn, username, setUsername, setUserId, baseUrl } = useContext(MyContext);
 
     // const router = createBrowserRouter(
     //     createRoutesFromElements(
@@ -38,7 +38,7 @@ function App() {
         if (isLoggedIn === "true") setLoggedIn(true);
         const usernameFromLS = localStorage.getItem("username");
         if (usernameFromLS && !username) setUsername(usernameFromLS);
-        checkForCookie(setUserId);
+        checkForCookie(setUserId, baseUrl, setLoggedIn, setUsername);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

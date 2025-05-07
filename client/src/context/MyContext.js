@@ -11,6 +11,8 @@ export const ContextProvider = ({ children }) => {
     const [completedShown, setCompletedShown] = useState(false); // checkbox in Form
     const [uncompletedShown, setUncompletedShown] = useState(false); // checkbox in Form
 
+    const baseUrl = process.env.REACT_APP_API_BASE_URL;
+
     return (
         <MyContext.Provider
             value={{
@@ -28,6 +30,7 @@ export const ContextProvider = ({ children }) => {
                 setCompletedShown,
                 uncompletedShown,
                 setUncompletedShown,
+                baseUrl,
             }}
         >
             {children}

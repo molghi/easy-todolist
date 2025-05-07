@@ -4,7 +4,7 @@ import axios from "axios";
 import getAllFromDB from "../utils/getAllFromDB";
 
 export const Form = () => {
-    const { setTasks, setLoading, userId, completedShown, setCompletedShown, uncompletedShown, setUncompletedShown } =
+    const { setTasks, setLoading, userId, completedShown, setCompletedShown, uncompletedShown, setUncompletedShown, baseUrl } =
         useContext(MyContext);
 
     const [formInput, setFormInput] = useState(""); // 'add your task' input
@@ -13,10 +13,10 @@ export const Form = () => {
         try {
             e.preventDefault();
             setLoading(true);
-            const res = await axios.post("/todos", { todoName: formInput, userId }); // post new to established backend route
+            const res = await axios.post(`${baseUrl}/todos`, { todoName: formInput, userId }); // post new to established backend route
             setLoading(false);
             if (res.status.toString().startsWith(2)) {
-                getAllFromDB(setTasks, setLoading, userId); // check if all good, fetch all from db
+                getAllFromDB(setTasks, setLoading, userId, baseUrl); // check if all good, fetch all from db
                 setFormInput("");
             }
         } catch (error) {
