@@ -9,15 +9,32 @@ const rateLimit = require("express-rate-limit");
 const cookieParser = require("cookie-parser");
 const todosRouter = require("./routes/todos");
 const authRouter = require("./routes/auth");
+const path = require("path");
 
 // Init Express
 const app = express();
 
+// Serve the React app
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static(path.join(__dirname, "client/build")));
+
+    app.get("*", (req, res) => {
+        res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+    });
+}
+
 // Basic Middleware Stack
+const allowedOrigins = [
+    "http://localhost:3000",
+    "https://easy-todolist.vercel.app",
+    "https://easy-todolist-production-a58c.up.railway.app",
+    "https://cryptic-caverns-09109-a6e8262f9747.herokuapp.com",
+];
 app.use(
     cors({
-        origin: "http://localhost:3000", // My front-end origin (dev mode)
-        credentials: true, // Allow sending cookies with requests (dev mode)
+        origin: allowedOrigins,
+        credentials: true, // Allow sending cookies with requests
+        methods: ["GET", "POST", "PATCH", "DELETE"],
     })
 );
 app.use(express.json({ limit: "10kb" })); // security layer: constrain incoming JSON payloads to 10 kb, offering some protection against large-body attacks
@@ -36,7 +53,7 @@ app.use(
 app.use(cookieParser());
 
 // Start Server
-const port = process.env.PORT;
+const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Server running on port ${port}`));
 
 // Mongo Connect

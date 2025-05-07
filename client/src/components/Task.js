@@ -23,7 +23,7 @@ export const Task = ({ task, setTasks, setLoading, userId, completedShown, uncom
     const deleteOne = async () => {
         try {
             setLoading(true);
-            const res = await axios.delete(`${baseUrl}/todos`, { data: { id: task._id } });
+            const res = await axios.delete(`${baseUrl}/todos`, { data: { id: task._id } }, { withCredentials: true });
             setLoading(false);
             if (res.status.toString().startsWith(2)) {
                 getAllFromDB(setTasks, setLoading, userId, baseUrl); // check if all good, fetch all from db
@@ -36,7 +36,7 @@ export const Task = ({ task, setTasks, setLoading, userId, completedShown, uncom
     const editOne = async () => {
         try {
             setLoading(true);
-            const res = await axios.patch(`${baseUrl}/todos/${task._id}`, { todoName: input }); // edit only todo name
+            const res = await axios.patch(`${baseUrl}/todos/${task._id}`, { todoName: input }, { withCredentials: true }); // edit only todo name
             setLoading(false);
             if (res.status.toString().startsWith(2)) {
                 getAllFromDB(setTasks, setLoading, userId, baseUrl); // check if all good, fetch all from db
@@ -51,7 +51,11 @@ export const Task = ({ task, setTasks, setLoading, userId, completedShown, uncom
             const dateCompleted = task.dateCompleted === null ? new Date().toISOString() : null; // either when or null
             const isCompleted = task.isCompleted ? false : true; // either true or false
             setLoading(true);
-            const res = await axios.patch(`${baseUrl}/todos/${task._id}`, { dateCompleted, isCompleted }); // toggle completed of one todo
+            const res = await axios.patch(
+                `${baseUrl}/todos/${task._id}`,
+                { dateCompleted, isCompleted },
+                { withCredentials: true }
+            ); // toggle completed of one todo
             setLoading(false);
             if (res.status.toString().startsWith(2)) {
                 getAllFromDB(setTasks, setLoading, userId, baseUrl); // check if all good, fetch all from db

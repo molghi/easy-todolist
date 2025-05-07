@@ -18,8 +18,7 @@ const authHandler = async (req, res, next) => {
 
         res.send("all good");
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: "Server error." });
+        res.status(500).json({ message: "Error authenticating" });
     }
 };
 
@@ -40,8 +39,7 @@ const signUp = async (req, res, next, username, password) => {
         req.body.user = savedUser; // set it up on the req.body so the next middleware could use it
         return next();
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: "Server error." });
+        res.status(500).json({ message: "Error signing up" });
     }
 };
 
@@ -63,8 +61,7 @@ const logIn = async (req, res, next, username, password) => {
         }
         return next();
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: "Server error." });
+        res.status(500).json({ message: "Error logging in" });
     }
 };
 
@@ -93,8 +90,9 @@ const signToken = async (req, res, next) => {
         const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1d" }); // Sign the token with a secret key
         res.cookie("authToken", token, {
             httpOnly: true, // Prevents JavaScript from accessing the cookie
-            // secure: process.env.NODE_ENV === "production", // Set to true in production for HTTPS
+            secure: process.env.NODE_ENV === "production", // Set to true in production for HTTPS
             maxAge: 24 * 60 * 60 * 1000, // 1 day
+            sameSite: "None",
         });
         return res.status(statusCode).json({
             token,
@@ -102,8 +100,7 @@ const signToken = async (req, res, next) => {
             userId: req.params.specifier === "log-in" && req.body.user._id,
         }); // Return the token in the response
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: "Server Error" });
+        res.status(500).json({ message: "Error signing token" });
     }
 };
 
@@ -112,10 +109,9 @@ const signToken = async (req, res, next) => {
 // clear the auth cookie
 const clearCookie = async (req, res, next) => {
     try {
-        res.clearCookie("authToken", { httpOnly: true });
+        res.clearCookie("authToken", { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "None" });
         return res.status(200).json({ message: "Cookie cleared" });
     } catch (err) {
-        console.error(err);
         return res.status(500).json({ message: "Error clearing cookie" });
     }
 };
@@ -133,7 +129,6 @@ const checkCookie = async (req, res, next) => {
         res.status(200).json({ message: decoded.userId });
         // read the authToken cookie -- verify it via jwt.verify() -- return user info or status
     } catch (err) {
-        console.error(err);
         return res.status(500).json({ message: "Error checking cookie" });
     }
 };

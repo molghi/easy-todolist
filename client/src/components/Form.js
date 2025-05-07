@@ -13,7 +13,7 @@ export const Form = () => {
         try {
             e.preventDefault();
             setLoading(true);
-            const res = await axios.post(`${baseUrl}/todos`, { todoName: formInput, userId }); // post new to established backend route
+            const res = await axios.post(`${baseUrl}/todos`, { todoName: formInput, userId }, { withCredentials: true }); // post new to established backend route
             setLoading(false);
             if (res.status.toString().startsWith(2)) {
                 getAllFromDB(setTasks, setLoading, userId, baseUrl); // check if all good, fetch all from db

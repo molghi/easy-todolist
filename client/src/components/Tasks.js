@@ -20,6 +20,8 @@ export const Tasks = () => {
         if (loading) typewriterEffect(timer);
     }, [loading, timer]);
 
+    console.log(tasks);
+
     return (
         <div className="tasks">
             <div className="container">
@@ -36,6 +38,7 @@ export const Tasks = () => {
                     </div>
                     {tasks &&
                         tasks.length > 0 &&
+                        Array.isArray(tasks) &&
                         tasks.map((task) => (
                             <Task
                                 key={task._id}
